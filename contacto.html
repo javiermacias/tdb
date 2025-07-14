@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Contacto - Ediciones té de boldo</title>
+<meta content="Contáctanos - Ediciones té de boldo" name="description">
+<link href="style.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="./logo tdb.png" rel="shortcut icon" type="image/x-icon"/>
+</meta></head>
+<body>
+<nav class="menu">
+  <div class="contenedor">
+    <a href="index.html"><img alt="logo de tdb" class="logo" src="./logo tdb.png"/></a>
+    <input class="menu-toggle-checkbox" id="menu-toggle" type="checkbox"/>
+    <label class="menu-toggle-icon" for="menu-toggle">☰</label>
+    <ul class="menu-links">
+      <li><a href="index.html">inicio</a></li>
+      <li><a href="fanzines.html">fanzines</a></li>
+      <li><a href="videos.html">videos</a></li>
+      <li><a href="contacto.html">contacto</a></li>
+    </ul>
+  </div>
+</nav>
+<br/><br/>
+<div class="contact-container">
+<p class="parrafo-intro">
+            Si estás en Argentina y quieres comprar nuestros fanzines en formato papel, o para cualquier consulta, comentario o colaboración, puedes usar el siguiente formulario.
+        </p>
+<div class="form-wrapper">
+<h3>No dudes en contactarnos</h3>
+<form action="https://formspree.io/f/mvgrwjrr" class="contact-form" method="POST">
+<label for="name">Nombre:</label>
+<input id="name" name="name" required="" type="text"/>
+<label for="email">Tu Correo Electrónico:</label>
+<input id="email" name="email" required="" type="email"/>
+<label for="subject">Asunto:</label>
+<input id="subject" name="_subject" placeholder="Consulta sobre fanzines, videos, etc." type="text"/>
+<label for="message">Mensaje:</label>
+<textarea id="message" name="message" required=""></textarea>
+<input name="_next" type="hidden" value="https://tudominio.com/gracias.html">
+<button type="submit">Enviar Mensaje</button>
+</input></form>
+</div>
+<div class="social-media">
+<p>También puedes seguirnos y contactarnos a través de Instagram:</p>
+<a href="https://www.instagram.com/ediciones.tdb/" rel="noopener noreferrer" target="_blank">
+<img alt="Logo de Instagram" class="social-logo" src="./logo instagram.png"/>
+</a>
+</div>
+</div>
+</body>
+</html>

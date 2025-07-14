@@ -1,0 +1,61 @@
+/* Contenedor principal de la grilla de videos */
+.video-content {
+  display: grid; /* Convertimos a grilla */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Columnas responsivas */
+  gap: 40px; /* Espacio entre los videos */
+  width: 100%;
+  max-width: 1200px; /* Aumentamos el ancho máximo para permitir más columnas */
+  margin: 0 auto; /* Centrar la grilla */
+  padding: 120px 20px 40px; /* Aplicamos el padding aquí para el contenido de la grilla */
+}
+
+/* Cada video (item de la grilla) */
+.video-item {
+  width: 100%;
+  text-align: center;
+  /* Hacemos cada item flex container para organizar su contenido (video y título) */
+  display: flex;
+  flex-direction: column; /* Esto es CLAVE: asegura que los hijos se apilen verticalmente */
+  justify-content: flex-start; /* Alinea el video y el título al principio del item */
+  align-items: center; /* Centra el contenido horizontalmente dentro del item */
+}
+
+/* Contenedor responsivo del iframe */
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* Mantiene proporción 16:9 */
+  height: 0;
+  overflow: hidden;
+  margin-bottom: 10px; /* Espacio entre el video y su título */
+}
+
+/* Video iframe */
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* Título debajo del video */
+.video-title {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 16px;
+  color: #000000;
+  text-align: center;
+  /* Permite que el título ocupe el espacio necesario sin afectar el flex-grow de la columna de la grilla */
+  width: 100%; /* Asegura que el título ocupe todo el ancho disponible en el video-item */
+  /* Eliminamos flex-grow y display: flex del título mismo para evitar conflictos si no son necesarios */
+}
+
+/* Media query para pantallas pequeñas (por ejemplo, móviles) */
+@media (max-width: 768px) {
+  .video-content {
+    grid-template-columns: 1fr; /* Una sola columna en pantallas pequeñas */
+    padding: 80px 15px 30px; /* Ajustar padding para móviles */
+  }
+}

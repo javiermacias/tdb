@@ -1,0 +1,628 @@
+/* ==========================================================================
+   Estilos Generales
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto Mono', monospace;
+  background-color: #b1a9a9; /* Fondo rojo */
+  text-align: justify; /* General justify para el cuerpo, pero se sobrescribe donde sea necesario */
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   Menú de Navegación
+   ========================================================================== */
+.menu {
+  background: #b1a9a9; /* Fondo del menú rojo */
+  padding: 5px 0; /* Padding vertical para el menú */
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  top: 0;
+  left: 0;
+}
+
+.menu .contenedor {
+  display: grid;
+  grid-template-columns: auto 1fr auto; 
+  align-items: center; /* Alinea todo verticalmente al centro */
+  width: 100%;
+  padding: 0 20px; /* Espaciado en los bordes de la pantalla */
+  max-width: 1200px; /* Limita el ancho del contenido del menú */
+  margin: 0 auto; /* Centra este contenedor completo en la pantalla */
+}
+
+.menu .logo {
+  grid-column: 1 / 2; /* Asegura que el logo esté en la primera columna */
+  justify-self: start; /* Lo pega al inicio (izquierda) de su columna */
+  background-color: transparent;
+  padding: 3px;
+  width: 5rem; /* Establece el logo a 5rem (equivalente a 80px por defecto) */
+  height: auto; /* Mantiene la proporción */
+}
+
+/* Oculta el checkbox y el icono de hamburguesa por defecto en desktop */
+.menu-toggle-checkbox {
+    display: none;
+}
+
+.menu-toggle-icon {
+    display: none; /* Oculto en desktop */
+}
+
+/* La lista UL (menú principal) */
+.menu-links { 
+  grid-column: 3 / 4;
+  list-style: none;
+  display: flex; /* Sigue usando flex para alinear sus 'li' */
+  justify-content: center; /* Centra los 'li' dentro de este 'ul' */
+  flex-wrap: wrap;
+  gap: clamp(10px, 2vw, 20px); /* El gap se encoge proporcionalmente, min 10px, max 20px */
+  padding-left: 0;
+  margin: 0; /* Reseteamos márgenes */
+}
+
+.menu-links li { 
+  margin: 0; 
+  position: relative;
+}
+
+/* Regla específica para el margen entre elementos de menú más grande */
+.menu-links li:not(:last-child) { 
+  margin-right: clamp(20px, 8vw, 100px); /* Reduce el margen en pantallas más pequeñas */
+}
+
+.menu-links a { 
+  display: inline-block;
+  font-family: 'Arial Black', sans-serif;
+  font-size: clamp(16px, 3vw, 22px); /* Mínimo 16px, preferido 3% del ancho del viewport, máximo 22px */
+  text-transform: uppercase;
+  color: black; /* Color de texto del menú: negro */
+  text-decoration: none;
+  font-weight: normal;
+  padding: 5px 10px;
+  letter-spacing: 1px;
+  transition: all 0.2s ease-out; /* Simplificamos la transición */
+  background-color: transparent;
+  border-radius: 5px;
+}
+
+.menu-links a:hover { 
+  transform: scale(1.08);
+}
+
+/* Submenú Desplegable */
+.menu-links ul.submenu { 
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: black;
+  font-size: small;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1001;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 100px;
+  width: max-content;
+  text-align: left;
+}
+
+.menu-links li:hover ul.submenu { 
+  display: block;
+  opacity: 1;
+}
+
+.menu-links li:hover ul.submenu a { 
+  color: #b1a9a9; /* Color de texto del submenú: rojo */
+}
+
+.menu-links li ul.submenu li { 
+  display: flex;
+  align-items: center;
+  line-height: 1.4;
+  margin: 5px 0;
+  padding-right: 15px;
+}
+
+.menu-links li ul.submenu li::before { 
+  content: '-';
+  color: #b1a9a9;
+  margin-right: 5px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* ==========================================================================
+   Contenido Principal y Fanzines (Secciones generales)
+   ========================================================================== */
+.parent, .contact-container {
+  padding-top: 60px; /* Ajuste para evitar superposición con el menú fijo */
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 40px; /* Ajuste de padding inferior */
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.header-container {
+  text-align: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.header-container h1,
+.header-container h2,
+.header-container p {
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #000000;
+}
+
+.header-container h1 {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.header-container h2 {
+  margin-bottom: 20px;
+}
+
+.header-container p {
+  font-size: 16px;
+  margin-bottom: 30px;
+  text-align: justify;
+}
+
+.header-container .p-parrafoCitado {
+  font-size: 14px;
+}
+
+.header-container .p-parrafoCitadoCita {
+  font-size: 14px;
+  text-align: right;
+}
+
+/* Estilos para el bloque de la licencia (UNIFICADO - AHORA CON JUSTIFY) */
+.info-licencia {
+  max-width: 800px;
+  margin: 40px auto 20px auto; /* Centra el bloque */
+  padding: 0 16px;
+  text-align: justify; /* <<< REVERTIDO A JUSTIFY PARA QUE SE VEA COMO EN BALADAS1.HTML */
+  font-size: 0.85em;
+  color: #000000; /* Asegura el texto negro */
+  line-height: 1.6;
+}
+
+/* La regla .copyleft-text y .copyleft-content HAN SIDO ELIMINADAS del CSS
+   porque ahora todo copyleft usará .info-licencia. */
+
+
+.fanzine-link-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+
+.fanzine-link {
+  font-family: var(--font-secondary);
+  font-size: clamp(32px, 8vw, 56px);
+  text-transform: uppercase;
+  width: 100%;
+  display: block;
+  text-align: center;
+  margin-bottom: 0.5em;
+  line-height: 1.2;
+}
+
+.fanzine-link a {
+  display: inline-block;
+  color: var(--color-text);
+  text-decoration: none;
+  transition: transform 0.2s ease-out;
+}
+
+.fanzine-link a:hover {
+    transform: scale(1.08);
+}
+
+/* Ajuste para el espaciado entre los fanzines en la lista */
+.fanzine-list .fanzine-link {
+  margin-bottom: 2em;
+}
+
+.fanzine-subtitle {
+  font-size: 0.4em;
+  display: block;
+  color: #000000;
+  text-transform: none;
+  font-weight: normal;
+}
+
+/* ==========================================================================
+   Notas al Pie y Bloques de Cita (General)
+   ========================================================================= */
+.nota-al-pie {
+  margin-top: 40px;
+  padding-top: 20px;
+}
+
+.nota-al-pie p {
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+  text-align: justify;
+  font-size: 0.9em;
+  color: #000000;
+}
+
+.nota-al-pie sup {
+  vertical-align: top;
+  font-size: 0.7em;
+  margin-right: 4px;
+}
+
+.cita-bloque {
+  border: 2px solid black;
+  padding: 1em;
+  max-width: 700px;
+  width: 100%;
+  margin: 1.5em auto;
+  box-sizing: border-box;
+  font-family: 'Roboto Mono', serif;
+  font-size: 0.95em;
+}
+
+.footnote {
+  font-family: "Roboto Mono", monospace;
+  font-size: 10pt;
+  color: #000;
+  line-height: 1.4;
+  margin-bottom: 1em;
+  text-align: left;
+}
+
+.footnote-sym {
+  font-weight: bold;
+  margin-right: 0.3em;
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   Estilos específicos de Fanzines (por ejemplo, Tesis Manu)
+   ========================================================================== */
+
+/* Para las citas con sangría o indentadas */
+.cita-sangrada {
+  padding-left: 2em; /* Sangría a la izquierda */
+  font-style: italic;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+/* Para los párrafos que indican el autor de una cita */
+.cita-autor {
+  text-align: right; /* Alinea el autor a la derecha */
+  font-style: italic;
+  margin-top: -0.5em; /* Reduce el espacio con la cita de arriba */
+}
+
+/* Contenedor general para un poema */
+.poema {
+  margin: 2em auto; /* Espacio vertical y centrado horizontal */
+  max-width: 600px; /* Un ancho menor para que parezca un poema */
+}
+
+/* Cada línea de un poema */
+.poema p {
+  text-align: center; /* Centra las líneas del poema */
+  margin-bottom: 0.2em; /* Reduce el espacio entre líneas */
+  font-size: 1.1em; /* Un poco más grande para darle énfasis */
+}
+
+/* Para los textos que deben ir centrados (subtítulos, etc.) */
+.texto-centrado {
+    text-align: center;
+}
+
+/* ==========================================================================
+   Estilos de la Página de Contacto
+   ========================================================================== */
+.contact-container {
+    /* Padding ya definido en la sección "Contenido Principal y Fanzines" */
+    max-width: 1000px; /* Aumentar el ancho máximo del contenedor del formulario */
+}
+
+/* Párrafo inicial dentro de contact-container (fuera del formulario) */
+.contact-container > p { 
+    font-family: 'Roboto Mono', monospace;
+    font-size: 18px;
+    color: #000000; /* Color negro para este párrafo */
+    margin-bottom: 20px; 
+}
+
+.contact-form {
+    background-color: #b1a9a9; /* Fondo del formulario: rojo */
+    padding: 50px; /* Aumentar el padding para hacerlo más grande por dentro */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 40px;
+    text-align: left;
+}
+
+/* Párrafo dentro del formulario (ej. "¡Nos encantaría saber de ti!") */
+.contact-form p { 
+    font-family: 'Roboto Mono', monospace;
+    font-size: 16px;
+    color: #000000; /* Color negro para este párrafo */
+    margin-bottom: 25px;
+    text-align: center; /* Centrar el texto dentro del formulario */
+}
+
+.contact-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-family: 'Roboto Mono', monospace;
+    color: #000000; /* Color de las etiquetas: negro */
+}
+
+.contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form textarea {
+    width: 100%; /* Asegura que ocupe todo el ancho disponible */
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #000000; /* Borde de inputs: negro */
+    border-radius: 4px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 16px;
+    background-color: #b1a9a9; /* Fondo del input/textarea: rojo */
+    color: #000000; /* Color del texto que el usuario escribe: negro */
+}
+
+/* Reglas para el color del placeholder */
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+    color: #000000; /* Color del texto del placeholder: negro */
+    opacity: 1; /* Esto es importante para Firefox */
+}
+
+/* Prefijos para mayor compatibilidad con navegadores antiguos */
+.contact-form input::-webkit-input-placeholder,
+.contact-form textarea::-webkit-input-placeholder { /* Chrome, Safari, Opera */
+    color: #000000;
+    opacity: 1;
+}
+
+.contact-form input::-moz-placeholder,
+.contact-form textarea::-moz-placeholder { /* Firefox 19+ */
+    color: #000000;
+    opacity: 1;
+}
+
+.contact-form input:-ms-input-placeholder,
+.contact-form textarea:-ms-input-placeholder { /* IE 10+ */
+    color: #000000;
+    opacity: 1;
+}
+
+.contact-form input:-moz-placeholder,
+.contact-form textarea:-moz-placeholder { /* Firefox 18- */
+    color: #000000;
+    opacity: 1;
+}
+
+.contact-form textarea {
+    resize: vertical; /* Permite redimensionar verticalmente */
+    min-height: 120px;
+}
+
+.contact-form button {
+    background-color: #000000; /* Fondo del botón: negro */
+    color: #b1a9a9; /* Color del texto del botón: rojo */
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease-out; /* Añadimos transform a la transición */
+}
+
+.contact-form button:hover {
+    transform: scale(1.08); /* Efecto de escala al pasar el ratón, como en los enlaces del menú */
+}
+
+.social-media {
+    margin-top: 50px;
+}
+
+.social-media p {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 18px;
+    color: #000000; /* Color de párrafo en redes sociales: negro */
+    margin-bottom: 20px;
+}
+
+.social-media a {
+    display: inline-block;
+    margin: 0 15px;
+    text-decoration: none;
+}
+
+.social-media img {
+    width: 50px; /* Tamaño del logo de Instagram */
+    height: 50px;
+    border-radius: 50%; /* Para que sea circular si lo prefieres */
+    transition: transform 0.3s ease;
+}
+
+.social-media img:hover {
+    transform: scale(1.1);
+}
+
+/* ==========================================================================
+   Contenedor de la Cala (Visibilidad controlada por clase en el body)
+   ========================================================================== */
+.cala-elemento { 
+  display: none; /* OCULTO por defecto en todas las páginas */
+  position: fixed; 
+  bottom: 0; 
+  right: 0; 
+  width: clamp(60px, 10vw, 120px); /* Tamaño más pequeño: min 60px, pref 10%vw, max 120px */
+  height: auto; 
+  z-index: 990; 
+  margin: 20px; 
+}
+
+.cala-elemento img {
+  width: 100%; 
+  height: auto;
+}
+
+/* Clase en el body para mostrar la cala en páginas específicas (index, fanzines individuales) */
+body.mostrar-cala .cala-elemento {
+  display: block; /* Muestra la cala solo si el body tiene la clase 'mostrar-cala' */
+}
+
+
+/* ==========================================================================
+   Media Queries Globales
+   ========================================================================== */
+/* Punto de quiebre para el menú de hamburguesa */
+@media (max-width: 992px) { 
+  /* Oculta el menú normal y muestra el icono de hamburguesa */
+  .menu .logo { 
+    grid-column: 1 / 2;
+    justify-self: start;
+    width: 4rem; /* Hacemos el logo un poco más chico en pantallas pequeñas (~64px) */
+  }
+
+  .menu .menu-links { /* OCULTA EL MENÚ EN PANTALLAS PEQUEÑAS POR DEFECTO */
+    display: none; 
+    grid-column: auto; /* Resetea la columna */
+    justify-self: auto; /* Resetea la alineación */
+    margin: 0;
+    padding: 0;
+    flex-direction: column; /* Menú desplegado vertical */
+    position: fixed; /* Ocupa toda la pantalla */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh; /* 100% de la altura del viewport */
+    background-color: #b1a9a9; /* Fondo del menú desplegado */
+    padding-top: 100px; /* Espacio para el logo y hamburguesa */
+    align-items: center; /* Centra los ítems del menú verticalmente */
+    justify-content: flex-start; /* Alinea los ítems al inicio */
+    gap: 20px; /* Espacio entre ítems del menú desplegado */
+    z-index: 999; /* Por debajo de la barra fija, pero encima del contenido */
+    overflow-y: auto; /* Permite scroll si hay muchos ítems */
+  }
+
+  .menu .menu-toggle-checkbox:checked ~ .menu-links { /* MUESTRA EL MENÚ CUANDO EL CHECKBOX ESTÁ MARCADO */
+    display: flex; 
+  }
+
+  .menu .contenedor {
+    grid-template-columns: auto 1fr auto; /* Mantiene 3 columnas para logo, espacio, hamburguesa */
+    justify-content: space-between; /* Logo a la izquierda, hamburguesa a la derecha */
+    padding: 0 20px;
+    width: 100%;
+    max-width: none; /* Elimina max-width para que ocupe todo el ancho */
+    margin: 0; /* Elimina centrado en mobile */
+  }
+
+  .menu-toggle-icon { /* ESTILOS PARA EL ÍCONO DE HAMBURGUESA */
+    display: block; /* Muestra el icono de hamburguesa */
+    grid-column: 3 / 4; /* Colócalo en la tercera columna */
+    justify-self: end; /* Lo pega a la derecha de su columna */
+    font-size: 2rem; /* Tamaño del icono */
+    cursor: pointer;
+    color: black; /* Color del icono */
+    padding: 5px 10px;
+    z-index: 1001; /* Asegura que esté por encima del menú desplegado */
+  }
+
+  /* Ajustes para los ítems de menú desplegados */
+  .menu-links li {
+    width: 100%; /* Los ítems del menú ocupan todo el ancho en móvil */
+    text-align: center;
+    margin: 0; /* Resetea márgenes */
+  }
+  .menu-links li:not(:last-child) {
+    margin-right: 0; /* Elimina el margen grande */
+  }
+  .menu-links a {
+    font-size: clamp(1.5rem, 5vw, 2.2rem); /* Ajustamos el clamp para móvil: más pequeño */
+    padding: 15px 0; /* Más padding para que los enlaces sean más fáciles de tocar */
+    width: 100%; /* Ocupa todo el ancho disponible */
+  }
+
+  /* Submenú en móvil (dentro del menú desplegado) */
+  .menu-links ul.submenu {
+    position: static;
+    width: 100%;
+    padding-right: 0;
+    text-align: center;
+    max-height: none;
+    overflow-y: visible;
+    background-color: transparent; /* Fondo transparente o el mismo del menú */
+  }
+  .menu-links li ul.submenu li {
+    padding: 5px 0;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Ajustes generales de padding para contenido principal en pantallas pequeñas */
+  .parent, .contact-container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  /* Ajustes de tamaño de fuente para párrafos en pantallas pequeñas */
+  .header-container p {
+    font-size: 15px;
+  }
+  .header-container .p-parrafoCitado,
+  .header-container .p-parrafoCitadoCita {
+    font-size: 13.5px;
+  }
+
+  /* Ajustes para la cala en móviles muy pequeños */
+  body.mostrar-cala .cala-elemento { /* Solo aplica si tiene la clase para mostrar */
+    position: relative; /* Cambia a posición relativa para que fluya con el contenido */
+    width: clamp(60px, 30vw, 100px); /* Un poco más pequeño y más adaptable */
+    margin: 20px auto; /* Centrar horizontalmente y añadir margen */
+    display: block; /* Asegura que se muestre */
+    text-align: center;
+  }
+
+  /* Ajustes para el menú en pantallas muy pequeñas (ajustes finos de fuente si es necesario) */
+  .menu-links a {
+    font-size: clamp(1.3rem, 4.5vw, 1.8rem); /* Un poco más pequeño en móviles muy pequeños */
+  }
+
+  /* Ajustes de padding para el formulario de contacto en móviles */
+  .contact-form {
+      padding: 20px; /* Reducir el padding en móviles */
+  }
+  .contact-form input[type="text"],
+  .contact-form input[type="email"],
+  .contact-form textarea {
+      width: 100%; /* Asegurar que ocupen el 100% del ancho disponible */
+  }
+}

@@ -1,0 +1,33 @@
+Menu Hamburguesa nuevo
+<nav class="menu">
+      <div class="contenedor">
+        <img src="./logo tdb.png" alt="logo de tdb" class="logo" />
+        
+        <input type="checkbox" id="menu-toggle" class="menu-toggle-checkbox">
+        <label for="menu-toggle" class="menu-toggle-icon">☰</label>
+        
+        <ul class="menu-links">
+          <li><a href="./index.html">inicio</a></li>
+          <li>
+            <a href="fanzines.html">fanzines</a>
+            
+          </li>
+          <li><a href="./videos.html">videos</a></li>
+          <li><a href="./contacto.html">contacto</a></li>
+        </ul>
+      </div>
+    </nav>
+
+Menu viejo
+
+<nav class="menu">
+  <div class="contenedor">
+    <img src="../logo tdb.png" alt="logo de tdb" width="120px" class="logo" />
+    <ul>
+      <li><a href="../index.html">inicio</a></li>
+      <li><a href="../fanzines.html">fanzines</a></li>
+      <li><a href="../videos.html">videos</a></li>
+      <li><a href="../contacto.html">contacto</a></li> 
+    </ul>
+  </div>
+</nav>
