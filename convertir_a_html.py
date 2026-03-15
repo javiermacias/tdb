@@ -1,28 +1,47 @@
 import docx
 import os
 import sys
+import re
 
 def crear_html_desde_word(ruta_docx, nombre_salida_html):
     try:
         documento = docx.Document(ruta_docx)
     except Exception as e:
-        print(f"Error: No se pudo abrir el archivo '{ruta_docx}'. Asegúrate de que el nombre y la ruta son correctos.")
-        print(f"Detalle del error: {e}")
+        print(f"Error: No se pudo abrir '{ruta_docx}'. {e}")
         return
 
-    # --- Plantilla HTML ---
+    # --- 1. Extracción de Notas al Pie (Back-end) ---
+    notas_dict = {}
+    try:
+        # Accedemos al XML de las notas para extraer el texto y el ID
+        footnotes_part = documento.part.related_parts
+        for rel in footnotes_part:
+            if "footnotes" in footnotes_part[rel].partname:
+                import lxml.etree as etree
+                xml_tree = etree.fromstring(footnotes_part[rel]._blob)
+                ns = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
+                for fn in xml_tree.xpath('//w:footnote', namespaces=ns):
+                    id_nota = fn.get('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}id')
+                    if int(id_nota) > 0:
+                        texto = "".join(fn.xpath('.//w:t/text()', namespaces=ns))
+                        notas_dict[id_nota] = texto
+    except:
+        pass
+
+    # --- 2. Tu Plantilla HTML (Sin cambios en tus rutas) ---
     html_inicio = f"""<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ediciones té de boldo</title>
-    <meta name="description" content="psicoterapia institucional en córdoba argentina" />
     <link rel="stylesheet" href="../style.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet" />
+    <style>
+        /* Estilos mínimos para que las notas funcionen */
+        .nota-ref {{ vertical-align: super; font-size: 0.75em; text-decoration: none; padding: 0 2px; }}
+        .seccion-notas {{ margin-top: 4em; border-top: 1px solid #444; padding-top: 1em; font-size: 0.9em; }}
+        .backlink {{ text-decoration: none; margin-left: 8px; }}
+    </style>
 </head>
 <body>
     <nav class="menu">
@@ -35,12 +54,57 @@ def crear_html_desde_word(ruta_docx, nombre_salida_html):
             </ul>
         </div>
     </nav>
-    <div class="parent">
-        <div class="header-container">
+    <div class="parent"><div class="header-container">
 """
-    
+
+    contenido_html = []
+    dentro_de_poema = False
+
+    # --- 3. Procesamiento de Párrafos ---
+    for para in documento.paragraphs:
+        # Procesamos el contenido del párrafo (Itálicas y Negritas)
+        p_html_interno = ""
+        for run in para.runs:
+            texto_run = run.text
+            if run.italic: texto_run = f"<em>{texto_run}</em>"
+            if run.bold: texto_run = f"<strong>{texto_run}</strong>"
+            p_html_interno += texto_run
+
+        # Insertar llamadas a notas al pie [n]
+        fn_refs = re.findall(r'w:footnoteReference w:id="(\d+)"', para._p.xml)
+        for fid in fn_refs:
+            p_html_interno += f'<a href="#fn{fid}" id="ref{fid}" class="nota-ref">[{fid}]</a>'
+
+        texto_plano = para.text.strip()
+        if not texto_plano: continue
+
+        # Tu lógica original de estilos
+        if texto_plano == '[POEMA]':
+            contenido_html.append('<div class="poema">')
+            dentro_de_poema = True
+        elif texto_plano == '[/POEMA]':
+            contenido_html.append('</div>')
+            dentro_de_poema = False
+        elif 'Heading 1' in para.style.name:
+            contenido_html.append(f'<h1>{p_html_interno}</h1>')
+        elif 'Heading 2' in para.style.name:
+            contenido_html.append(f'<h2>{p_html_interno}</h2>')
+        elif texto_plano.startswith('---'):
+            contenido_html.append(f'<p class="cita-bloque">{p_html_interno.replace("---", "").strip()}</p>')
+        elif texto_plano.startswith('-'):
+            contenido_html.append(f'<p class="cita-sangrada">{p_html_interno.replace("-", "", 1).strip()}</p>')
+        else:
+            contenido_html.append(f'<p>{p_html_interno}</p>')
+
+    # --- 4. El fondo de la página (Notas) ---
+    if notas_dict:
+        contenido_html.append('<div class="seccion-notas"><h3>Notas</h3>')
+        for fid, ftexto in notas_dict.items():
+            contenido_html.append(f'<p id="fn{fid}">{fid}. {ftexto} <a href="#ref{fid}" class="backlink">↩</a></p>')
+        contenido_html.append('</div>')
+
+    # --- 5. Cierre ---
     html_fin = """
-            <p class="info-licencia" xmlns:cc="http://creativecommons.org/ns#">Los derechos les pertenecen a lxs autores, el pasaje de lengua tiene licencia copyleft, haga lo que quiera, cite la fuente y use la misma licencia <a href="http://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" /><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" /><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" /></a></p>
         </div>
         <div class="contenedor cala">
             <img src="../cala.png" alt="cala" width="100px" class="logo" />
@@ -49,54 +113,15 @@ def crear_html_desde_word(ruta_docx, nombre_salida_html):
 </body>
 </html>
 """
-
-    contenido_html = []
-    dentro_de_poema = False
-
-    for para in documento.paragraphs:
-        texto_limpio = para.text.strip()
-        
-        if not texto_limpio:
-            continue
-
-        if texto_limpio == '[POEMA]':
-            contenido_html.append('<div class="poema">')
-            dentro_de_poema = True
-            continue
-        elif texto_limpio == '[/POEMA]':
-            contenido_html.append('</div>')
-            dentro_de_poema = False
-            continue
-
-        if 'Heading 1' in para.style.name:
-            contenido_html.append(f'<h1>{texto_limpio}</h1>')
-        elif 'Heading 2' in para.style.name:
-            contenido_html.append(f'<h2>{texto_limpio}</h2>')
-        elif texto_limpio.startswith('---'):
-            contenido_html.append(f'<p class="cita-bloque">{texto_limpio[3:].strip()}</p>')
-        elif texto_limpio.startswith('-'):
-            contenido_html.append(f'<p class="cita-sangrada">{texto_limpio[1:].strip()}</p>')
-        elif dentro_de_poema:
-            contenido_html.append(f'<p>{texto_limpio}</p>')
-        else:
-            contenido_html.append(f'<p>{texto_limpio}</p>')
-
-    html_completo = html_inicio + '\n'.join(contenido_html) + html_fin
-
-    # Guardar el nuevo archivo HTML en la carpeta 'fanzines'
+    
+    # Guardar
+    if not os.path.exists('fanzines'): os.makedirs('fanzines')
     ruta_salida = os.path.join('fanzines', nombre_salida_html)
     with open(ruta_salida, 'w', encoding='utf-8') as f:
-        f.write(html_completo)
+        f.write(html_inicio + '\n'.join(contenido_html) + html_fin)
     
-    print(f"¡Éxito! Se ha creado el archivo '{ruta_salida}'.")
+    print(f"Archivo generado: {ruta_salida}")
 
-
-# --- Cómo ejecutar el script ---
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Error: Uso incorrecto.")
-        print('Ejemplo: python convertir_a_html.py "mi_documento.docx" "salida.html"')
-    else:
-        archivo_word = sys.argv[1]
-        archivo_html_salida = sys.argv[2]
-        crear_html_desde_word(archivo_word, archivo_html_salida)
+    if len(sys.argv) == 3:
+        crear_html_desde_word(sys.argv[1], sys.argv[2])
