@@ -34,7 +34,7 @@
       border: 2px solid #000;
       border-radius: 8px;
       padding: 16px;
-      width: 220px;
+      width: 250px;
       box-shadow: 0 4px 16px rgba(0,0,0,0.2);
       font-family: 'Roboto Mono', monospace;
       display: none;
@@ -59,7 +59,9 @@
       margin-bottom: 12px;
       font-size: 12px;
       color: #000;
+      gap: 8px;
     }
+    .acc-row > span { white-space: nowrap; }
 
     .acc-size-btns {
       display: flex;
@@ -195,7 +197,7 @@
       color: #000 !important;
     }
 
-    body.acc-grayscale { filter: grayscale(100%); }
+    #acc-content-wrapper.acc-grayscale { filter: grayscale(100%); }
 
     body.acc-underline a { text-decoration: underline !important; }
   `;
@@ -240,13 +242,28 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
   }
 
+  function getContentWrapper() {
+    let cw = document.getElementById('acc-content-wrapper');
+    if (!cw) {
+      cw = document.createElement('div');
+      cw.id = 'acc-content-wrapper';
+      const widget = document.getElementById('acc-widget');
+      Array.from(document.body.children).forEach(function (child) {
+        if (child !== widget) cw.appendChild(child);
+      });
+      document.body.insertBefore(cw, widget);
+    }
+    return cw;
+  }
+
   function applyState(s) {
     const b = document.body;
+    const cw = getContentWrapper();
     b.classList.remove('acc-large', 'acc-xlarge');
     if (s.size === 'large')  b.classList.add('acc-large');
     if (s.size === 'xlarge') b.classList.add('acc-xlarge');
     b.classList.toggle('acc-contrast',  !!s.contrast);
-    b.classList.toggle('acc-grayscale', !!s.grayscale);
+    cw.classList.toggle('acc-grayscale', !!s.grayscale);
     b.classList.toggle('acc-underline', !!s.underline);
 
     document.querySelectorAll('[data-size]').forEach(btn =>
