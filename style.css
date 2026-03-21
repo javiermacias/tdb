@@ -2,7 +2,7 @@
    Variables globales
    ========================================================================== */
 :root {
-  --font-secondary: 'Arial Black', sans-serif;
+  --font-secondary: 'Roboto Mono', monospace;
   --color-text: #000000;
 }
 
@@ -88,7 +88,7 @@ body {
 
 .menu-links a { 
   display: inline-block;
-  font-family: 'Arial Black', sans-serif;
+  font-family: 'Roboto Mono', monospace;
   font-size: clamp(16px, 3vw, 22px); /* Mínimo 16px, preferido 3% del ancho del viewport, máximo 22px */
   text-transform: uppercase;
   color: black; /* Color de texto del menú: negro */
