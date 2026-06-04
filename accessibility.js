@@ -21,7 +21,7 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       transition: transform 0.2s, background-color 0.2s;
     }
-    #acc-toggle:hover { transform: scale(1.1); background-color: #fbff00; }
+    #acc-toggle:hover { transform: scale(1.1); background-color: #d3cdcd; }
 
     #acc-panel {
       position: fixed;
